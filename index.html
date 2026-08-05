@@ -7,462 +7,704 @@
 <title>Haztap — Caja</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== Design Tokens ===== */
-  :root {
-    --color-bg: #f3f2f2;
-    --color-surface: #ffffff;
-    --color-text: #201e1d;
-    --color-accent: #1abcfe;
-    --color-accent-hover: #08aaf0;
-    --color-divider: rgba(32,30,29,0.14);
-    --color-neutral-100: #f8f6f6;
-    --color-neutral-200: #eae7e7;
-    --color-neutral-400: #bab6b6;
-    --color-neutral-500: #9b9797;
-    --color-neutral-600: #7d7979;
-    --color-neutral-700: #605d5d;
-    --color-neutral-800: #444141;
-    --color-neutral-900: #2d2b2b;
-    --color-accent-100: #e8f9ff;
-    --color-accent-200: #b8effe;
-    --color-accent-400: #1abcfe;
-    --success-bg: #e6f4ea;
-    --success-border: #34a853;
-    --success-text: #137333;
-    --error-bg: #fce8e6;
-    --error-border: #ea4335;
-    --error-text: #c5221f;
-    --warn-bg: #fef7e0;
-    --warn-border: #fbbc04;
-    --warn-text: #b06000;
-    --font: "Archivo", system-ui, sans-serif;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 14px;
-    --radius-pill: 9999px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.10);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
-    --shadow-lg: 0 12px 32px rgba(0,0,0,0.18);
-    --ease: cubic-bezier(.22,1,.36,1);
-  }
+/* =====================================================
+   DESIGN SYSTEM — Haztap Caja · Neo-Fintech
+   ===================================================== */
+:root {
+  /* Colores base */
+  --bg:          #f2f2f7;
+  --surface:     #ffffff;
+  --surface-2:   #f9f9fb;
+  --surface-3:   #f0f0f5;
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font);
-    font-size: 15px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-  }
-  ::selection { background: var(--color-accent); color: #fff; }
-  button, input { font-family: inherit; }
-  /* Solo botones muestran outline de foco del browser;
-     los inputs usan el borde del .input-wrap:focus-within */
-  button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-  input:focus-visible { outline: none; }
-  @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
-  }
+  /* Texto */
+  --text-1:      #111118;
+  --text-2:      #3c3c43;
+  --text-3:      #8e8e9a;
 
-  .app {
-    width: 100%; max-width: 520px; min-height: 100%;
-    display: flex; flex-direction: column;
-    padding: 24px 20px 48px;
-  }
+  /* Acento principal */
+  --accent:      #1abcfe;
+  --accent-d:    #0099d9;
+  --accent-glow: rgba(26,188,254,0.22);
+  --accent-soft: rgba(26,188,254,0.10);
 
-  /* ---- Demo Badge ---- */
-  .demo-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: #fef3c7; border: 1.5px solid #fbbf24; color: #92400e;
-    font-size: 11px; font-weight: 800; letter-spacing: .06em;
-    padding: 4px 10px; border-radius: var(--radius-pill);
-    margin-bottom: 16px; width: fit-content;
-  }
+  /* Estados */
+  --ok-bg:       #e8f8ef;
+  --ok-border:   #2db96a;
+  --ok-text:     #0a6b35;
+  --err-bg:      #fde9e7;
+  --err-border:  #e8422f;
+  --err-text:    #b81c0d;
+  --warn-bg:     #fef8e0;
+  --warn-border: #e8ab00;
+  --warn-text:   #8a5800;
 
-  /* ---- Header ---- */
-  .topbar {
-    display: flex; align-items: center; gap: 12px;
-    padding: 0 2px 20px;
-    border-bottom: 2px solid var(--color-divider);
-    margin-bottom: 20px;
-  }
-  .topbar .logo-text {
-    font-weight: 800; font-size: 26px; letter-spacing: -0.03em;
-    color: var(--color-text);
-  }
-  .topbar .logo-text span { color: var(--color-accent); }
-  .topbar .divider { width: 2px; height: 26px; background: var(--color-divider); margin: 0 4px; }
-  .topbar .comercio { font-size: 13px; color: var(--color-neutral-700); line-height: 1.3; }
-  .topbar .comercio b { display: block; color: var(--color-accent); font-weight: 800; font-size: 15px; }
+  /* Oscuro (tarjeta membresía / gate) */
+  --dark-1: #0f1117;
+  --dark-2: #181b24;
+  --dark-3: #22263a;
+  --dark-4: #2d324a;
 
-  /* ---- Segmented Tabs ---- */
-  .segmented {
-    display: grid; grid-template-columns: 1fr 1fr;
-    background: var(--color-surface);
-    border: 2px solid var(--color-neutral-900);
-    border-radius: var(--radius-md);
-    padding: 4px; gap: 4px;
-    margin-bottom: 24px; box-shadow: var(--shadow-sm);
-  }
-  .segmented button {
-    border: 0; background: transparent;
-    color: var(--color-neutral-700);
-    font-size: 14px; font-weight: 800; font-family: var(--font);
-    padding: 13px 10px; border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background .2s var(--ease), color .2s var(--ease);
-    display: flex; align-items: center; justify-content: center; gap: 7px;
-  }
-  .segmented button.active { background: var(--color-accent); color: #fff; }
+  /* Radio */
+  --r-sm:   6px;
+  --r-md:   12px;
+  --r-lg:   18px;
+  --r-xl:   24px;
+  --r-pill: 9999px;
 
-  .panel { display: none; flex-direction: column; gap: 20px; }
-  .panel.active { display: flex; }
+  /* Sombras */
+  --sh-xs: 0 1px 2px rgba(0,0,0,.06);
+  --sh-sm: 0 2px 8px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --sh-md: 0 4px 20px rgba(0,0,0,.10), 0 1px 4px rgba(0,0,0,.05);
+  --sh-lg: 0 12px 40px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.06);
 
-  /* ---- Section label ---- */
-  .section-label {
-    font-size: 11px; font-weight: 800; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--color-neutral-600);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-label::after {
-    content: ""; flex: 1; height: 1px; background: var(--color-divider);
-  }
+  /* Fuente */
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --ease: cubic-bezier(.22,1,.36,1);
+}
 
-  /* ---- Fields ---- */
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field label { font-size: 12px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--color-neutral-800); margin-left: 2px; }
-  .field .input-wrap {
-    display: flex; align-items: center;
-    background: var(--color-surface);
-    border: 2px solid var(--color-neutral-900);
-    border-radius: var(--radius-md);
-    transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
-    position: relative;
-  }
-  .field .input-wrap:focus-within {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(59,130,246,.18);
-  }
-  .field .input-wrap.valid { border-color: var(--success-border); }
-  .field .input-wrap.valid .valid-icon { display: flex; }
-  .field .prefix { padding: 0 0 0 16px; color: var(--color-neutral-700); font-weight: 800; font-size: 18px; }
-  .field input {
-    flex: 1; min-width: 0; background: transparent; border: 0;
-    color: var(--color-text); font-family: var(--font);
-    font-weight: 800; font-size: 22px; letter-spacing: -0.01em;
-    padding: 16px 12px 16px 10px;
-    outline: none; /* El resaltado lo maneja .input-wrap:focus-within */
-    -webkit-appearance: none;
-  }
-  .field input::placeholder { color: var(--color-neutral-400); font-weight: 400; }
-  .valid-icon {
-    display: none; align-items: center; justify-content: center;
-    width: 28px; height: 28px; margin-right: 12px;
-    border-radius: 50%; background: var(--success-border); flex-shrink: 0;
-    animation: popIn .2s var(--ease);
-  }
-  .valid-icon svg { width: 14px; height: 14px; stroke: #fff; stroke-width: 2.5; fill: none; }
-  .field .hint { font-size: 12.5px; color: var(--color-neutral-700); margin-left: 2px; }
-  .field.grow-in { animation: growIn .25s var(--ease); }
-  @keyframes growIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+}
+::selection { background: var(--accent); color: #fff; }
+button, input { font-family: inherit; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus-visible  { outline: none; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration:.001ms!important; transition-duration:.001ms!important; }
+}
 
-  /* ---- Buttons ---- */
-  .btn {
-    appearance: none; border: 0;
-    border-radius: var(--radius-md);
-    padding: 18px 24px;
-    font-family: var(--font); font-size: 16px; font-weight: 800;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-    min-height: 60px;
-    transition: transform .12s var(--ease), background-color .18s var(--ease), filter .2s;
-    user-select: none; -webkit-user-select: none;
-  }
-  .btn:active { transform: scale(.97); }
-  .btn-primary { background: var(--color-accent); color: #fff; box-shadow: var(--shadow-md); }
-  .btn-primary:hover { background: var(--color-accent-hover); }
-  .btn-primary:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
-  .btn-ghost { background: var(--color-surface); border: 2px solid var(--color-neutral-900); color: var(--color-text); box-shadow: var(--shadow-sm); }
-  .btn-ghost:hover { background: var(--color-neutral-200); }
-  .btn-success { background: var(--success-border); color: #fff; box-shadow: 0 4px 12px rgba(52,168,83,.3); }
-  .btn-block { width: 100%; }
+/* ---- App shell ---- */
+.app {
+  width: 100%; max-width: 480px; min-height: 100%;
+  display: flex; flex-direction: column;
+  padding: 20px 16px 56px;
+}
 
-  /* Hold-to-confirm on register btn */
-  .btn-hold {
-    position: relative; overflow: hidden;
-  }
-  .btn-hold .hold-bar {
-    position: absolute; left: 0; top: 0; bottom: 0; width: 0;
-    background: rgba(255,255,255,.25);
-    transition: none;
-    border-radius: var(--radius-md);
-  }
-  .btn-hold.holding .hold-bar {
-    transition: width 1.8s linear;
-    width: 100%;
-  }
+/* =====================================================
+   GATE — PANTALLA DE ACCESO
+   ===================================================== */
+.gate-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--dark-1);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+}
+.gate-overlay.hidden { display: none; }
 
-  .spinner {
-    width: 20px; height: 20px; border-radius: 50%;
-    border: 3px solid rgba(255,255,255,.3); border-top-color: #fff;
-    animation: spin .7s linear infinite; display: none;
-  }
-  .btn-ghost .spinner { border-color: rgba(0,0,0,.12); border-top-color: var(--color-text); }
-  .btn.loading .spinner { display: inline-block; }
-  .btn.loading .btn-label { opacity: .7; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes popIn { from { opacity:0; transform:scale(.8); } to { opacity:1; transform:scale(1); } }
+/* Fondo decorativo */
+.gate-overlay::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% -10%, rgba(26,188,254,.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 90% 110%, rgba(26,188,254,.09) 0%, transparent 70%);
+  pointer-events: none;
+}
 
-  /* ---- Banners ---- */
-  .banner {
-    display: none; align-items: flex-start; gap: 12px;
-    padding: 14px 16px; border-radius: var(--radius-md);
-    font-size: 14.5px; font-weight: 600; line-height: 1.4;
-    animation: slideDown .22s var(--ease);
-  }
-  .banner.show { display: flex; }
-  .banner-icon {
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px;
-  }
-  .banner-icon svg { width: 12px; height: 12px; stroke-width: 2.5; fill: none; }
-  .banner-error { background: var(--error-bg); border: 2px solid var(--error-border); color: var(--error-text); }
-  .banner-error .banner-icon { background: var(--error-border); }
-  .banner-error .banner-icon svg { stroke: #fff; }
-  .banner-warn { background: var(--warn-bg); border: 2px solid var(--warn-border); color: var(--warn-text); }
-  .banner-warn .banner-icon { background: var(--warn-border); }
-  .banner-warn .banner-icon svg { stroke: #fff; }
-  .banner-ok { background: var(--success-bg); border: 2px solid var(--success-border); color: var(--success-text); }
-  .banner-ok .banner-icon { background: var(--success-border); }
-  .banner-ok .banner-icon svg { stroke: #fff; }
-  @keyframes slideDown { from {opacity:0;transform:translateY(-8px);} to {opacity:1;transform:translateY(0);} }
+.gate-card {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 360px;
+  text-align: center;
+}
 
-  /* ---- Result card ---- */
-  .result {
-    display: none; border-radius: var(--radius-lg);
-    background: var(--success-bg); border: 2px solid var(--success-border);
-    padding: 24px; animation: popIn .3s var(--ease);
-  }
-  .result.show { display: block; }
-  .result .r-hero {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
-  }
-  .check-circle {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: var(--success-border); display: flex;
-    align-items: center; justify-content: center;
-    flex-shrink: 0; animation: checkPop .35s var(--ease);
-    box-shadow: 0 4px 14px rgba(52,168,83,.35);
-  }
-  @keyframes checkPop {
-    0% { transform: scale(0); opacity: 0; }
-    70% { transform: scale(1.15); }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .check-circle svg { width: 26px; height: 26px; stroke: #fff; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .r-hero-text .r-title { font-size: 18px; font-weight: 800; color: var(--success-text); }
-  .r-hero-text .r-chip {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 12px; font-weight: 800; padding: 4px 10px;
-    border-radius: var(--radius-pill); margin-top: 4px;
-    background: #fff; color: var(--success-text); border: 1.5px solid var(--success-border);
-  }
-  .r-hero-text .r-chip.warn { color: var(--warn-text); border-color: var(--warn-border); }
-  .result .r-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .result .r-stat {
-    background: #fff; border-radius: var(--radius-md); padding: 14px 10px; text-align: center;
-    border: 1px solid rgba(52,168,83,.2); box-shadow: var(--shadow-sm);
-  }
-  .result .r-stat b { display: block; font-size: 30px; font-weight: 800; color: var(--color-text); line-height: 1; margin-bottom: 4px; }
-  .result .r-stat span { font-size: 11px; font-weight: 800; color: var(--color-neutral-700); text-transform: uppercase; letter-spacing: .07em; }
-  .result .r-note {
-    margin-top: 16px; padding-top: 14px;
-    border-top: 2px dashed rgba(52,168,83,.25);
-    font-size: 14px; font-weight: 600; color: var(--success-text);
-  }
+.gate-brand {
+  margin-bottom: 36px;
+}
+.gate-logo {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.04em;
+  color: #fff; line-height: 1;
+  margin-bottom: 6px;
+}
+.gate-logo em { font-style: normal; color: var(--accent); }
+.gate-tagline {
+  font-size: 13px; color: rgba(255,255,255,.45); font-weight: 500;
+}
 
-  /* Next-client button */
-  .btn-next {
-    margin-top: 4px;
-    background: var(--color-surface);
-    border: 2px solid var(--success-border);
-    color: var(--success-text);
-    box-shadow: none;
-  }
-  .btn-next:hover { background: var(--success-bg); }
+.gate-box {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: var(--r-xl);
+  padding: 28px 24px;
+  backdrop-filter: blur(20px);
+}
 
-  /* ---- Membership card ---- */
-  .card-wrap { display: none; flex-direction: column; gap: 20px; }
-  .card-wrap.show { display: flex; }
-  .membership {
-    position: relative; border-radius: var(--radius-lg);
-    padding: 24px; overflow: hidden;
-    background: var(--color-neutral-900);
-    color: #fff;
-    border: 2px solid var(--color-neutral-800);
-    box-shadow: var(--shadow-lg);
-    animation: cardIn .35s var(--ease);
-  }
-  @keyframes cardIn { from {opacity:0;transform:translateY(12px);} to {opacity:1;transform:translateY(0);} }
-  .membership::after {
-    content: ""; position: absolute; top: -30px; right: -30px;
-    width: 140px; height: 140px; border-radius: 50%;
-    border: 20px solid var(--color-accent); opacity: .22;
-  }
-  .membership .m-tier {
-    font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--color-accent-400); margin-bottom: 18px;
-  }
-  .membership .m-name { font-size: 24px; font-weight: 800; margin-bottom: 3px; }
-  .membership .m-id { font-size: 13px; color: var(--color-neutral-400); letter-spacing: .05em; margin-bottom: 18px; }
+.gate-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+  margin-bottom: 12px;
+}
 
-  /* Progress bar */
-  .m-progress { margin-bottom: 22px; }
-  .m-progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .m-progress-label span { font-size: 11px; color: var(--color-neutral-400); font-weight: 600; }
-  .m-progress-label b { font-size: 11px; color: var(--color-accent-400); font-weight: 800; }
-  .m-progress-track { height: 6px; background: rgba(255,255,255,.12); border-radius: 99px; overflow: hidden; }
-  .m-progress-fill { height: 100%; background: linear-gradient(90deg, var(--color-accent), #60a5fa); border-radius: 99px; transition: width .6s var(--ease); }
+/* Input dentro del gate */
+.gate-box .input-wrap {
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.13);
+  border-radius: var(--r-md);
+  margin-bottom: 14px;
+}
+.gate-box .input-wrap:focus-within {
+  border-color: var(--accent);
+  background: rgba(255,255,255,.10);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.gate-box input {
+  color: #fff !important;
+  text-align: center;
+  letter-spacing: .3em;
+  font-size: 22px !important;
+}
+.gate-box input::placeholder {
+  color: rgba(255,255,255,.25);
+  letter-spacing: normal;
+  font-size: 15px;
+}
 
-  .membership .m-footer { display: flex; align-items: flex-end; justify-content: space-between; }
-  .membership .m-balance span { display: block; font-size: 11px; color: var(--color-neutral-400); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
-  .membership .m-balance b { font-size: 36px; font-weight: 800; color: var(--color-accent-400); line-height: 1; }
-  .membership .m-hist { text-align: right; font-size: 13px; color: var(--color-neutral-400); font-weight: 500; }
+.gate-msg {
+  font-size: 12.5px; font-weight: 600;
+  color: #ff7875; min-height: 18px;
+  margin-bottom: 12px;
+}
 
-  .limit-banner { display: none; font-size: 14px; font-weight: 700; padding: 14px 16px; border-radius: var(--radius-md); background: var(--warn-bg); border: 2px solid var(--warn-border); color: var(--warn-text); }
-  .limit-banner.show { display: block; }
+/* =====================================================
+   HEADER
+   ===================================================== */
+.topbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 2px 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.logo-text {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.04em;
+  color: var(--text-1); line-height: 1;
+}
+.topbar .divider {
+  width: 1px; height: 22px;
+  background: rgba(0,0,0,.12);
+  margin: 0 6px;
+}
+.topbar .comercio {
+  font-size: 12.5px; color: var(--text-3); line-height: 1.3;
+}
+.topbar .comercio b {
+  display: block; font-weight: 700;
+  color: var(--text-2); font-size: 13.5px;
+}
 
-  /* ---- Rewards ---- */
-  .rewards-title { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--color-neutral-800); margin: 4px 0 8px 2px; }
-  .rewards { display: flex; flex-direction: column; gap: 10px; }
-  .reward {
-    display: flex; align-items: center; gap: 16px;
-    padding: 16px; border-radius: var(--radius-md);
-    border: 2px solid var(--color-neutral-900);
-    background: var(--color-surface); cursor: pointer;
-    transition: border-color .15s var(--ease), background .15s var(--ease);
-    box-shadow: var(--shadow-sm);
-  }
-  .reward.locked { cursor: not-allowed; opacity: .55; }
-  .reward.selected { border-color: var(--color-accent); background: var(--color-accent-100); }
-  .reward .dot {
-    width: 22px; height: 22px; border-radius: 50%;
-    border: 2px solid var(--color-neutral-400); flex: none;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color .15s, background .15s;
-  }
-  .reward.selected .dot { border-color: var(--color-accent); background: var(--color-accent); }
-  .reward.selected .dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
-  .reward .r-body { flex: 1; min-width: 0; }
-  .reward .r-name { font-size: 16px; font-weight: 800; color: var(--color-text); }
-  .reward .r-pts { font-size: 13px; font-weight: 600; color: var(--color-neutral-700); margin-top: 2px; }
-  .reward .r-status { font-size: 13px; font-weight: 800; white-space: nowrap; }
-  .reward.locked .r-status { color: var(--color-neutral-600); }
-  .reward:not(.locked) .r-status { color: var(--success-text); }
+/* =====================================================
+   TABS — SEGMENTED CONTROL
+   ===================================================== */
+.segmented {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--surface);
+  border: 1.5px solid rgba(0,0,0,.08);
+  border-radius: var(--r-lg);
+  padding: 4px; gap: 4px;
+  margin-bottom: 22px;
+  box-shadow: var(--sh-xs);
+}
+.segmented button {
+  border: 0; background: transparent;
+  color: var(--text-3);
+  font-size: 13.5px; font-weight: 700; font-family: var(--font);
+  padding: 12px 10px; border-radius: var(--r-md);
+  cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease), box-shadow .2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.segmented button.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(26,188,254,.40);
+}
+.segmented button svg { flex-shrink: 0; }
 
-  .empty-state { text-align: center; padding: 50px 20px 30px; color: var(--color-neutral-700); }
-  .empty-state .glyph { font-size: 40px; margin-bottom: 12px; color: var(--color-neutral-400); }
-  .empty-state p { font-size: 14px; font-weight: 500; line-height: 1.5; margin: 0 auto; max-width: 260px; }
+.panel { display: none; flex-direction: column; gap: 18px; }
+.panel.active { display: flex; }
 
-  .footer-note { text-align: center; font-size: 12px; font-weight: 600; color: var(--color-neutral-500); margin-top: auto; padding-top: 32px; }
+/* =====================================================
+   SECTION LABEL
+   ===================================================== */
+.section-label {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--text-3);
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 4px;
+}
+.section-label::after {
+  content: ""; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(0,0,0,.06), transparent);
+}
 
-  /* Demo panel */
-  .demo-panel {
-    background: var(--color-surface); border: 2px dashed var(--color-neutral-400);
-    border-radius: var(--radius-lg); padding: 18px; margin-bottom: 4px;
-  }
-  .demo-panel h3 { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px; }
-  .demo-clients { display: flex; flex-direction: column; gap: 8px; }
-  .demo-client {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px; border-radius: var(--radius-md);
-    border: 1.5px solid var(--color-neutral-200);
-    cursor: pointer; transition: border-color .15s, background .15s;
-    background: var(--color-neutral-100);
-  }
-  .demo-client:hover { border-color: var(--color-accent); background: var(--color-accent-100); }
-  .demo-client .dc-cedula { font-size: 17px; font-weight: 800; color: var(--color-accent); min-width: 90px; }
-  .demo-client .dc-info { flex: 1; }
-  .demo-client .dc-name { font-size: 13.5px; font-weight: 700; color: var(--color-text); }
-  .demo-client .dc-pts { font-size: 12px; color: var(--color-neutral-700); }
-  .demo-client .dc-badge {
-    font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: var(--radius-pill);
-    text-transform: uppercase; letter-spacing: .06em;
-  }
-  .badge-member { background: #e0e7ff; color: #3730a3; }
-  .badge-silver { background: #f1f5f9; color: #475569; }
-  .badge-gold { background: #fef3c7; color: #92400e; }
+/* =====================================================
+   CAMPOS / FIELDS
+   ===================================================== */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-3);
+  margin-left: 4px;
+}
+.field .input-wrap {
+  display: flex; align-items: center;
+  background: var(--surface);
+  border: 1.5px solid rgba(0,0,0,.12);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-xs);
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+  position: relative;
+}
+.field .input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow), var(--sh-xs);
+}
+.field .input-wrap.valid {
+  border-color: var(--ok-border);
+  box-shadow: 0 0 0 2px rgba(45,185,106,.15), var(--sh-xs);
+}
+.field .input-wrap.valid .valid-icon { display: flex; }
+.field .prefix {
+  padding: 0 2px 0 16px;
+  color: var(--text-3); font-weight: 700; font-size: 17px;
+  flex-shrink: 0; user-select: none;
+}
+.field input {
+  flex: 1; min-width: 0; background: transparent; border: 0;
+  color: var(--text-1); font-family: var(--font);
+  font-weight: 700; font-size: 20px;
+  padding: 15px 12px 15px 8px;
+  outline: none; -webkit-appearance: none;
+  font-variant-numeric: tabular-nums;
+}
+/* Date input normalizado */
+.field input[type="date"] {
+  font-size: 16px; padding: 15px 16px;
+  color: var(--text-2); font-weight: 600;
+}
+.field input::placeholder { color: var(--text-3); font-weight: 500; font-size: 17px; }
+.valid-icon {
+  display: none; align-items: center; justify-content: center;
+  width: 26px; height: 26px; margin-right: 12px;
+  border-radius: 50%; background: var(--ok-border); flex-shrink: 0;
+  animation: iconPop .22s var(--ease);
+}
+.valid-icon svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 2.5; fill: none; }
+.field .hint {
+  font-size: 12px; color: var(--text-3);
+  margin-left: 4px; font-weight: 500;
+}
+.field.grow-in { animation: growIn .28s var(--ease); }
+
+/* =====================================================
+   BOTONES
+   ===================================================== */
+.btn {
+  appearance: none; border: 0;
+  border-radius: var(--r-md);
+  padding: 17px 24px;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  min-height: 58px;
+  transition: transform .12s var(--ease), filter .15s, opacity .15s;
+  user-select: none; -webkit-user-select: none;
+  letter-spacing: -.01em;
+}
+.btn:active { transform: scale(.97); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(26,188,254,.35), 0 1px 3px rgba(0,0,0,.12);
+}
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-primary:disabled { opacity: .42; cursor: not-allowed; box-shadow: none; filter: none; }
+
+.btn-ghost {
+  background: var(--surface);
+  border: 1.5px solid rgba(0,0,0,.12);
+  color: var(--text-1);
+  box-shadow: var(--sh-xs);
+}
+.btn-ghost:hover { background: var(--surface-3); }
+
+.btn-next {
+  background: transparent;
+  border: 1.5px solid var(--ok-border);
+  color: var(--ok-text);
+  box-shadow: none;
+  margin-top: 2px;
+}
+.btn-next:hover { background: var(--ok-bg); }
+
+.btn-block { width: 100%; }
+
+/* Spinner */
+.spinner {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2.5px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  animation: spin .7s linear infinite;
+  display: none; flex-shrink: 0;
+}
+.btn-ghost .spinner { border-color: rgba(0,0,0,.12); border-top-color: var(--text-1); }
+.btn.loading .spinner { display: inline-block; }
+.btn.loading .btn-label { opacity: .7; }
+.btn.loading .btn-icon { display: none; }
+
+/* =====================================================
+   BANNERS
+   ===================================================== */
+.banner {
+  display: none; align-items: flex-start; gap: 10px;
+  padding: 13px 15px; border-radius: var(--r-md);
+  font-size: 13.5px; font-weight: 600; line-height: 1.45;
+  animation: slideDown .2s var(--ease);
+}
+.banner.show { display: flex; }
+.banner-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.banner-icon svg { width: 11px; height: 11px; stroke-width: 2.5; fill: none; }
+.banner-error  { background: var(--err-bg);  border: 1.5px solid var(--err-border);  color: var(--err-text);  }
+.banner-error  .banner-icon { background: var(--err-border); }
+.banner-warn   { background: var(--warn-bg); border: 1.5px solid var(--warn-border); color: var(--warn-text); }
+.banner-warn   .banner-icon { background: var(--warn-border); }
+.banner-ok     { background: var(--ok-bg);   border: 1.5px solid var(--ok-border);   color: var(--ok-text);   }
+.banner-ok     .banner-icon { background: var(--ok-border); }
+.banner-icon svg { stroke: #fff; }
+
+/* =====================================================
+   TARJETA RESULTADO (post-registro)
+   ===================================================== */
+.result {
+  display: none; border-radius: var(--r-lg);
+  background: var(--ok-bg);
+  border: 1.5px solid var(--ok-border);
+  padding: 22px; animation: popIn .3s var(--ease);
+}
+.result.show { display: block; }
+
+.result .r-hero { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+
+.check-circle {
+  width: 54px; height: 54px; border-radius: 50%;
+  background: linear-gradient(135deg, #2db96a, #1a9e56);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(45,185,106,.35);
+  animation: checkPop .38s var(--ease);
+}
+.check-circle svg { width: 24px; height: 24px; stroke: #fff; stroke-width: 2.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.r-hero-text .r-title { font-size: 17px; font-weight: 800; color: var(--ok-text); letter-spacing: -.02em; }
+.r-hero-text .r-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 700; padding: 3px 10px;
+  border-radius: var(--r-pill); margin-top: 5px;
+  background: #fff; color: var(--ok-text);
+  border: 1px solid rgba(45,185,106,.3);
+}
+.r-hero-text .r-chip.warn { color: var(--warn-text); border-color: rgba(232,171,0,.35); }
+
+.result .r-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.result .r-stat {
+  background: #fff; border-radius: var(--r-md); padding: 14px 10px; text-align: center;
+  border: 1px solid rgba(45,185,106,.15);
+  box-shadow: var(--sh-xs);
+}
+.result .r-stat b {
+  display: block; font-size: 28px; font-weight: 800;
+  color: var(--text-1); line-height: 1; margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.result .r-stat span { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; }
+.result .r-note {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1.5px dashed rgba(45,185,106,.25);
+  font-size: 13.5px; font-weight: 600; color: var(--ok-text);
+}
+
+/* =====================================================
+   TARJETA MEMBRESÍA
+   ===================================================== */
+.card-wrap { display: none; flex-direction: column; gap: 18px; }
+.card-wrap.show { display: flex; }
+
+.membership {
+  position: relative; border-radius: var(--r-xl);
+  padding: 24px; overflow: hidden;
+  background: linear-gradient(145deg, var(--dark-2) 0%, var(--dark-1) 100%);
+  color: #fff;
+  box-shadow: var(--sh-lg);
+  animation: cardIn .38s var(--ease);
+}
+/* Línea de acento arriba */
+.membership::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), rgba(26,188,254,.3));
+}
+/* Orbe decorativo */
+.membership::after {
+  content: "";
+  position: absolute; top: -50px; right: -50px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,188,254,.12) 0%, transparent 70%);
+}
+
+.membership .m-tier {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 6px;
+}
+.membership .m-tier::after {
+  content: ""; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(26,188,254,.3), transparent);
+}
+.membership .m-name {
+  font-size: 22px; font-weight: 800; letter-spacing: -.03em;
+  margin-bottom: 3px; line-height: 1.15;
+}
+.membership .m-id {
+  font-size: 12px; color: rgba(255,255,255,.45); letter-spacing: .06em;
+  margin-bottom: 20px; font-weight: 500;
+}
+
+/* Barra de progreso */
+.m-progress { margin-bottom: 20px; }
+.m-progress-label { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.m-progress-label span { font-size: 11px; color: rgba(255,255,255,.45); font-weight: 500; }
+.m-progress-label b { font-size: 11px; color: var(--accent); font-weight: 700; }
+.m-progress-track {
+  height: 5px; background: rgba(255,255,255,.10);
+  border-radius: 99px; overflow: hidden;
+}
+.m-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), rgba(26,188,254,.6));
+  border-radius: 99px;
+  transition: width .7s var(--ease);
+  box-shadow: 0 0 8px rgba(26,188,254,.5);
+}
+
+.membership .m-footer { display: flex; align-items: flex-end; justify-content: space-between; }
+.membership .m-balance span {
+  display: block; font-size: 10px; color: rgba(255,255,255,.45);
+  font-weight: 600; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px;
+}
+.membership .m-balance b {
+  font-size: 34px; font-weight: 800; color: #fff; line-height: 1;
+  letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+}
+.membership .m-hist { text-align: right; font-size: 12px; color: rgba(255,255,255,.35); font-weight: 500; }
+
+/* Banner de límite */
+.limit-banner {
+  display: none; font-size: 13.5px; font-weight: 600;
+  padding: 13px 16px; border-radius: var(--r-md);
+  background: var(--warn-bg); border: 1.5px solid var(--warn-border); color: var(--warn-text);
+}
+.limit-banner.show { display: block; }
+
+/* =====================================================
+   LISTA DE PREMIOS
+   ===================================================== */
+.rewards-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--text-3);
+  margin: 0 0 10px 2px;
+}
+.rewards { display: flex; flex-direction: column; gap: 8px; }
+.reward {
+  display: flex; align-items: center; gap: 14px;
+  padding: 15px 16px; border-radius: var(--r-md);
+  border: 1.5px solid rgba(0,0,0,.08);
+  background: var(--surface); cursor: pointer;
+  transition: border-color .15s var(--ease), background .15s var(--ease), box-shadow .15s;
+  box-shadow: var(--sh-xs);
+}
+.reward:not(.locked):hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow), var(--sh-xs);
+}
+.reward.locked { cursor: not-allowed; opacity: .5; }
+.reward.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+.reward .dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.18); flex: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, background .15s;
+  flex-shrink: 0;
+}
+.reward.selected .dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
+.reward.selected .dot::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+.reward .r-body { flex: 1; min-width: 0; }
+.reward .r-name { font-size: 15px; font-weight: 700; color: var(--text-1); letter-spacing: -.01em; }
+.reward .r-pts { font-size: 12.5px; font-weight: 500; color: var(--text-3); margin-top: 1px; }
+.reward .r-status { font-size: 12px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+.reward.locked .r-status { color: var(--text-3); }
+.reward:not(.locked) .r-status { color: var(--ok-text); }
+
+/* Estado vacío */
+.empty-state { text-align: center; padding: 44px 20px 24px; color: var(--text-3); }
+.empty-state .glyph { font-size: 38px; margin-bottom: 10px; opacity: .45; }
+.empty-state p { font-size: 13.5px; font-weight: 500; line-height: 1.55; max-width: 250px; margin: 0 auto; }
+
+/* =====================================================
+   MODAL DE CONFIRMACIÓN
+   ===================================================== */
+.confirm-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 50; align-items: flex-end; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.confirm-overlay.show { display: flex; animation: fadeIn .15s var(--ease); }
+
+.confirm-sheet {
+  width: 100%; max-width: 480px;
+  background: var(--surface);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 28px 20px calc(22px + env(safe-area-inset-bottom, 0px));
+  box-shadow: var(--sh-lg);
+  animation: slideUp .22s var(--ease);
+}
+
+/* Tirador visual */
+.confirm-sheet::before {
+  content: "";
+  display: block; width: 40px; height: 4px;
+  background: rgba(0,0,0,.12); border-radius: 99px;
+  margin: 0 auto 22px;
+}
+
+.confirm-title { font-size: 18px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 4px; }
+.confirm-sub   { font-size: 13px; color: var(--text-3); margin-bottom: 20px; font-weight: 500; }
+
+.confirm-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+.confirm-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 16px;
+  background: var(--surface-2);
+  border: 1.5px solid rgba(0,0,0,.06);
+  border-radius: var(--r-md);
+}
+.confirm-row span { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text-3); }
+.confirm-row b { font-size: 18px; font-weight: 800; color: var(--text-1); font-variant-numeric: tabular-nums; }
+
+.confirm-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+.footer-note {
+  text-align: center; font-size: 12px; font-weight: 500;
+  color: var(--text-3); margin-top: auto; padding-top: 28px;
+  line-height: 1.8;
+}
+#btnCerrarSesion {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+  cursor: pointer;
+}
+#btnCerrarSesion:hover { text-decoration: underline; }
+
+/* =====================================================
+   KEYFRAMES
+   ===================================================== */
+@keyframes growIn   { from {opacity:0;transform:translateY(-6px);} to {opacity:1;transform:translateY(0);} }
+@keyframes iconPop  { from {opacity:0;transform:scale(.7);} to {opacity:1;transform:scale(1);} }
+@keyframes popIn    { from {opacity:0;transform:scale(.95);} to {opacity:1;transform:scale(1);} }
+@keyframes slideDown{ from {opacity:0;transform:translateY(-6px);} to {opacity:1;transform:translateY(0);} }
+@keyframes slideUp  { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
+@keyframes fadeIn   { from {opacity:0;} to {opacity:1;} }
+@keyframes spin     { to {transform:rotate(360deg);} }
+@keyframes checkPop { 0%{transform:scale(0);opacity:0;} 70%{transform:scale(1.12);} 100%{transform:scale(1);opacity:1;} }
+@keyframes cardIn   { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- DEMO BADGE -->
-  <div class="demo-badge">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 16h-1v-4h-1m1-4h.01"/><circle cx="12" cy="12" r="10"/></svg>
-    MODO DEMO — Datos de prueba activos
+<!-- ============================================================
+     PANTALLA DE ACCESO
+     ============================================================ -->
+<div class="gate-overlay hidden" id="gateOverlay">
+  <div class="gate-card">
+    <div class="gate-brand">
+      <div class="gate-logo">haztap<em>.</em></div>
+      <div class="gate-tagline">Panel de caja — ingresa tu clave de acceso</div>
+    </div>
+    <div class="gate-box">
+      <div class="gate-label">Clave de acceso</div>
+      <div class="field">
+        <div class="input-wrap">
+          <input id="inClaveAcceso" type="password" inputmode="numeric"
+                 placeholder="••••" maxlength="20" autocomplete="off">
+        </div>
+      </div>
+      <div class="gate-msg" id="gateMsg"></div>
+      <button type="button" class="btn btn-primary btn-block" id="btnEntrarClave">
+        <span class="spinner"></span>
+        <span class="btn-label">Entrar al panel</span>
+      </button>
+    </div>
   </div>
+</div>
+
+<!-- ============================================================
+     APP PRINCIPAL
+     ============================================================ -->
+<div class="app">
 
   <!-- HEADER -->
   <div class="topbar">
     <div class="logo-text">haztap</div>
     <div class="divider"></div>
     <div class="comercio">
-      Panel de caja
-      <b id="nombreComercio">Tienda Demo</b>
+      <span id="usuarioActivo">Panel de caja</span>
+      <b id="nombreComercio">&nbsp;</b>
     </div>
   </div>
 
   <!-- TABS -->
   <div class="segmented" role="tablist">
     <button type="button" class="active" id="tabRegistrar" role="tab" aria-selected="true">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
       Registrar compra
     </button>
     <button type="button" id="tabCanjear" role="tab" aria-selected="false">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       Consultar / Canjear
     </button>
   </div>
 
   <div id="bannerGlobal" class="banner"></div>
 
-  <!-- ============ PANEL 1 — REGISTRAR ============ -->
+  <!-- ======================================================
+       PANEL 1 — REGISTRAR COMPRA
+       ====================================================== -->
   <section class="panel active" id="panelRegistrar">
-
-    <!-- Demo Clients -->
-    <div class="demo-panel">
-      <h3>👆 Clientes de prueba — click para cargar</h3>
-      <div class="demo-clients">
-        <div class="demo-client" onclick="cargarDemoRegistrar('12345678')">
-          <span class="dc-cedula">12345678</span>
-          <div class="dc-info"><div class="dc-name">Juan Pérez</div><div class="dc-pts">850 pts · Silver</div></div>
-          <span class="dc-badge badge-silver">Silver</span>
-        </div>
-        <div class="demo-client" onclick="cargarDemoRegistrar('87654321')">
-          <span class="dc-cedula">87654321</span>
-          <div class="dc-info"><div class="dc-name">María López</div><div class="dc-pts">2.300 pts · Gold</div></div>
-          <span class="dc-badge badge-gold">Gold</span>
-        </div>
-        <div class="demo-client" onclick="cargarDemoRegistrar('11111111')">
-          <span class="dc-cedula">11111111</span>
-          <div class="dc-info"><div class="dc-name">Pedro García</div><div class="dc-pts">150 pts · Member</div></div>
-          <span class="dc-badge badge-member">Member</span>
-        </div>
-        <div class="demo-client" onclick="cargarDemoRegistrar('99999999')">
-          <span class="dc-cedula">99999999</span>
-          <div class="dc-info"><div class="dc-name">Cliente nuevo</div><div class="dc-pts">Sin cuenta — pedirá WhatsApp</div></div>
-          <span class="dc-badge badge-member">Nuevo</span>
-        </div>
-      </div>
-    </div>
 
     <div class="section-label">Datos del cliente</div>
 
@@ -470,20 +712,22 @@
       <label for="inCedula">Cédula del cliente</label>
       <div class="input-wrap" id="wrapCedula">
         <span class="prefix">V-</span>
-        <input id="inCedula" type="tel" inputmode="numeric" placeholder="12345678" maxlength="9" autocomplete="off">
+        <input id="inCedula" type="tel" inputmode="numeric"
+               placeholder="12345678" maxlength="9" autocomplete="off">
         <div class="valid-icon">
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
       </div>
     </div>
 
-    <div class="section-label">Monto de la venta</div>
+    <div class="section-label">Detalle de la venta</div>
 
     <div class="field">
       <label for="inMonto">Monto neto de la compra</label>
       <div class="input-wrap" id="wrapMonto">
         <span class="prefix">$</span>
-        <input id="inMonto" type="tel" inputmode="decimal" placeholder="0.00" autocomplete="off">
+        <input id="inMonto" type="tel" inputmode="decimal"
+               placeholder="0.00" autocomplete="off">
         <div class="valid-icon">
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
@@ -491,11 +735,31 @@
       <span class="hint">Sin IVA / IGTF — solo el monto neto</span>
     </div>
 
+    <div class="field">
+      <label for="inFactura">N° de factura</label>
+      <div class="input-wrap" id="wrapFactura">
+        <span class="prefix">#</span>
+        <input id="inFactura" type="text" inputmode="text"
+               placeholder="00012345" autocomplete="off">
+        <div class="valid-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="inFecha">Fecha de la compra</label>
+      <div class="input-wrap">
+        <input id="inFecha" type="date" autocomplete="off">
+      </div>
+    </div>
+
     <div class="field grow-in" id="fieldTelefono" style="display:none;">
       <label for="inTelefono">WhatsApp del cliente (cliente nuevo)</label>
       <div class="input-wrap">
         <span class="prefix">+58</span>
-        <input id="inTelefono" type="tel" inputmode="numeric" placeholder="4141234567" autocomplete="off">
+        <input id="inTelefono" type="tel" inputmode="numeric"
+               placeholder="4141234567" autocomplete="off">
       </div>
       <span class="hint">Necesario solo la primera vez</span>
     </div>
@@ -503,22 +767,18 @@
     <div class="field grow-in" id="fieldNombre" style="display:none;">
       <label for="inNombre">Nombre (opcional)</label>
       <div class="input-wrap">
-        <input id="inNombre" type="text" placeholder="Nombre del cliente" autocomplete="off">
+        <input id="inNombre" type="text"
+               placeholder="Nombre del cliente" autocomplete="off">
       </div>
     </div>
 
-    <!-- Hold-to-confirm register button -->
-    <div id="confirmHint" style="font-size:12px;color:var(--color-neutral-700);text-align:center;display:none;">
-      Mantén presionado para confirmar el registro
-    </div>
-
-    <button type="button" class="btn btn-primary btn-block btn-hold" id="btnRegistrar">
-      <div class="hold-bar" id="holdBar"></div>
+    <button type="button" class="btn btn-primary btn-block" id="btnRegistrar">
       <span class="spinner"></span>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       <span class="btn-label">Registrar compra</span>
     </button>
 
+    <!-- Resultado post-registro -->
     <div class="result" id="resultRegistrar">
       <div class="r-hero">
         <div class="check-circle">
@@ -530,61 +790,36 @@
         </div>
       </div>
       <div class="r-stats">
-        <div class="r-stat">
-          <b id="resPuntos">0</b>
-          <span>Pts. sumados</span>
-        </div>
-        <div class="r-stat">
-          <b id="resSaldo">0</b>
-          <span>Billetera total</span>
-        </div>
+        <div class="r-stat"><b id="resPuntos">0</b><span>Pts. sumados</span></div>
+        <div class="r-stat"><b id="resSaldo">0</b><span>Billetera total</span></div>
       </div>
       <div class="r-note" id="resNota"></div>
     </div>
 
     <button type="button" class="btn btn-next btn-block" id="btnSiguiente" style="display:none;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Siguiente cliente
     </button>
 
   </section>
 
-  <!-- ============ PANEL 2 — CONSULTAR / CANJEAR ============ -->
+  <!-- ======================================================
+       PANEL 2 — CONSULTAR / CANJEAR
+       ====================================================== -->
   <section class="panel" id="panelCanjear">
-
-    <!-- Demo Clients -->
-    <div class="demo-panel">
-      <h3>👆 Clientes de prueba — click para buscar</h3>
-      <div class="demo-clients">
-        <div class="demo-client" onclick="cargarDemoBuscar('12345678')">
-          <span class="dc-cedula">12345678</span>
-          <div class="dc-info"><div class="dc-name">Juan Pérez</div><div class="dc-pts">850 pts · puede canjear café y descuento</div></div>
-          <span class="dc-badge badge-silver">Silver</span>
-        </div>
-        <div class="demo-client" onclick="cargarDemoBuscar('87654321')">
-          <span class="dc-cedula">87654321</span>
-          <div class="dc-info"><div class="dc-name">María López</div><div class="dc-pts">2.300 pts · puede canjear todo</div></div>
-          <span class="dc-badge badge-gold">Gold</span>
-        </div>
-        <div class="demo-client" onclick="cargarDemoBuscar('11111111')">
-          <span class="dc-cedula">11111111</span>
-          <div class="dc-info"><div class="dc-name">Pedro García</div><div class="dc-pts">150 pts · no puede canjear aún</div></div>
-          <span class="dc-badge badge-member">Member</span>
-        </div>
-      </div>
-    </div>
 
     <div class="field">
       <label for="inCedulaBuscar">Cédula del cliente</label>
       <div class="input-wrap">
         <span class="prefix">V-</span>
-        <input id="inCedulaBuscar" type="tel" inputmode="numeric" placeholder="12345678" maxlength="9" autocomplete="off">
+        <input id="inCedulaBuscar" type="tel" inputmode="numeric"
+               placeholder="12345678" maxlength="9" autocomplete="off">
       </div>
     </div>
 
     <button type="button" class="btn btn-ghost btn-block" id="btnBuscar">
       <span class="spinner"></span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <span class="btn-label">Buscar cliente</span>
     </button>
 
@@ -595,12 +830,11 @@
 
     <div class="card-wrap" id="cardWrap">
 
+      <!-- Tarjeta de membresía -->
       <div class="membership">
         <div class="m-tier" id="mTier">MEMBER</div>
         <div class="m-name" id="mName">—</div>
-        <div class="m-id" id="mId">CI —</div>
-
-        <!-- Progress bar to next level -->
+        <div class="m-id"   id="mId">CI —</div>
         <div class="m-progress">
           <div class="m-progress-label">
             <span id="mProgressLabel">Progreso al siguiente nivel</span>
@@ -610,7 +844,6 @@
             <div class="m-progress-fill" id="mProgressFill" style="width:0%"></div>
           </div>
         </div>
-
         <div class="m-footer">
           <div class="m-balance">
             <span>Billetera disponible</span>
@@ -631,218 +864,119 @@
 
       <button type="button" class="btn btn-primary btn-block" id="btnCanjear" disabled>
         <span class="spinner"></span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="btn-icon"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
         <span class="btn-label">Selecciona un premio</span>
       </button>
 
     </div>
-
   </section>
 
-  <div class="footer-note">Haztap · Panel operativo de caja</div>
+  <div class="footer-note">
+    Haztap · Panel operativo de caja<br>
+    <span id="btnCerrarSesion">Cambiar de usuario</span>
+  </div>
+
 </div>
 
+<!-- ============================================================
+     MODAL DE CONFIRMACIÓN
+     ============================================================ -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-sheet">
+    <div class="confirm-title">Confirmar registro</div>
+    <div class="confirm-sub">Revisa los datos antes de enviar — no se puede deshacer.</div>
+    <div class="confirm-rows">
+      <div class="confirm-row"><span>Cédula</span><b id="confirmCedula">—</b></div>
+      <div class="confirm-row"><span>Monto</span><b id="confirmMonto">—</b></div>
+      <div class="confirm-row"><span>Factura</span><b id="confirmFactura">—</b></div>
+    </div>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-ghost" id="btnCancelarConfirm">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="btnConfirmarRegistro">
+        <span class="spinner"></span>
+        <span class="btn-label">Sí, registrar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     LÓGICA (sin cambios respecto al original)
+     ============================================================ -->
 <script>
 (function(){
 
-  /* ================================================================
-     DATOS DE PRUEBA (MOCK)
-     Estos datos simulan lo que respondería Google Apps Script.
-     Reemplaza esto con google.script.run cuando estés en producción.
-  ================================================================ */
-  var DEMO_DB = {
-    comercio: { nombreComercio: 'Tienda Demo Haztap' },
-    clientes: {
-      '12345678': {
-        cedula: '12345678',
-        nombre: 'Juan Pérez',
-        saldo: 850,
-        historico: 2100,
-        nivel: 'Silver',
-        nivelActual: 1, // 0=Member, 1=Silver, 2=Gold, 3=Platinum
-        bloqueadoPorVisita: false,
-        premios: [
-          { id: 'cafe',      nombre: '☕ Café gratis',    puntos: 200,  alcanza: true,  faltan: 0   },
-          { id: 'desc10',    nombre: '🏷️ Descuento 10%',  puntos: 500,  alcanza: true,  faltan: 0   },
-          { id: 'almuerzo',  nombre: '🍽️ Almuerzo gratis',puntos: 1000, alcanza: false, faltan: 150 },
-          { id: 'giftcard',  nombre: '🎁 Gift card $20',  puntos: 2000, alcanza: false, faltan: 1150},
-        ]
-      },
-      '87654321': {
-        cedula: '87654321',
-        nombre: 'María López',
-        saldo: 2300,
-        historico: 8500,
-        nivel: 'Gold',
-        nivelActual: 2,
-        bloqueadoPorVisita: false,
-        premios: [
-          { id: 'cafe',      nombre: '☕ Café gratis',    puntos: 200,  alcanza: true,  faltan: 0    },
-          { id: 'desc10',    nombre: '🏷️ Descuento 10%',  puntos: 500,  alcanza: true,  faltan: 0    },
-          { id: 'almuerzo',  nombre: '🍽️ Almuerzo gratis',puntos: 1000, alcanza: true,  faltan: 0    },
-          { id: 'giftcard',  nombre: '🎁 Gift card $20',  puntos: 2000, alcanza: true,  faltan: 0    },
-        ]
-      },
-      '11111111': {
-        cedula: '11111111',
-        nombre: 'Pedro García',
-        saldo: 150,
-        historico: 150,
-        nivel: 'Member',
-        nivelActual: 0,
-        bloqueadoPorVisita: false,
-        premios: [
-          { id: 'cafe',      nombre: '☕ Café gratis',    puntos: 200,  alcanza: false, faltan: 50  },
-          { id: 'desc10',    nombre: '🏷️ Descuento 10%',  puntos: 500,  alcanza: false, faltan: 350 },
-          { id: 'almuerzo',  nombre: '🍽️ Almuerzo gratis',puntos: 1000, alcanza: false, faltan: 850 },
-          { id: 'giftcard',  nombre: '🎁 Gift card $20',  puntos: 2000, alcanza: false, faltan: 1850},
-        ]
-      }
-    },
-    niveles: [
-      { nombre: 'Member',   desde: 0,    hasta: 499   },
-      { nombre: 'Silver',   desde: 500,  hasta: 1999  },
-      { nombre: 'Gold',     desde: 2000, hasta: 4999  },
-      { nombre: 'Platinum', desde: 5000, hasta: 99999 },
-    ]
-  };
+  var gScript = (window.google && google.script && google.script.run) ? google.script.run : null;
 
-  // Calcula nivel según histórico de puntos
-  function calcularNivel(historico) {
-    for (var i = DEMO_DB.niveles.length - 1; i >= 0; i--) {
-      if (historico >= DEMO_DB.niveles[i].desde) return i;
-    }
-    return 0;
+  function backendConectado(){
+    if (gScript) return true;
+    showBanner(bannerGlobal, 'error', 'Esta página no está conectada a Google Sheets. Ábrela desde la URL de tu Apps Script (Implementar → Aplicación web) para que funcione con datos reales.');
+    return false;
   }
 
-  // Progreso porcentual hacia el siguiente nivel
-  function calcularProgreso(historico, nivelIdx) {
-    var nivel = DEMO_DB.niveles[nivelIdx];
-    var siguiente = DEMO_DB.niveles[nivelIdx + 1];
-    if (!siguiente) return { pct: 100, label: '¡Nivel máximo! Platinum' };
-    var avance = historico - nivel.desde;
-    var rango = siguiente.desde - nivel.desde;
-    var pct = Math.min(100, Math.round((avance / rango) * 100));
-    var faltan = siguiente.desde - historico;
-    return { pct: pct, label: 'Faltan ' + faltan + ' pts para ' + siguiente.nombre };
+  /* ---- Gate / acceso ---- */
+  var CLAVE_KEY  = 'haztap_clave_caja';
+  var NOMBRE_KEY = 'haztap_usuario_caja';
+  var gateOverlay     = $('gateOverlay');
+  var inClaveAcceso   = $('inClaveAcceso');
+  var gateMsg         = $('gateMsg');
+  var btnEntrarClave  = $('btnEntrarClave');
+  var usuarioActivoEl = $('usuarioActivo');
+  var claveAcceso  = '';
+  var nombreUsuario = '';
+  try { claveAcceso = localStorage.getItem(CLAVE_KEY) || ''; nombreUsuario = localStorage.getItem(NOMBRE_KEY) || ''; }
+  catch(e) { claveAcceso = ''; nombreUsuario = ''; }
+
+  function actualizarNombreEnHeader(){
+    usuarioActivoEl.textContent = nombreUsuario ? ('Hola, ' + nombreUsuario) : 'Panel de caja';
+  }
+  function mostrarApp(){
+    gateOverlay.classList.add('hidden');
+    actualizarNombreEnHeader();
+  }
+  function mostrarGate(){
+    gateOverlay.classList.remove('hidden');
+    inClaveAcceso.value = '';
+    gateMsg.textContent = '';
+    setTimeout(function(){ inClaveAcceso.focus(); }, 60);
+  }
+  function cerrarSesionClave(){
+    claveAcceso = ''; nombreUsuario = '';
+    try { localStorage.removeItem(CLAVE_KEY); localStorage.removeItem(NOMBRE_KEY); } catch(e) {}
+    mostrarGate();
   }
 
-  // Mock del backend — simula google.script.run
-  var gScript = (window.google && google.script && google.script.run) ? google.script.run : {
-    withSuccessHandler: function(cb){ this._ok = cb; return this; },
-    withFailureHandler: function(cb){ this._err = cb; return this; },
-    obtenerInfoComercio: function(){
-      var self = this;
-      setTimeout(function(){ self._ok && self._ok(DEMO_DB.comercio); }, 200);
-    },
-    registrarCompra: function(payload){
-      var self = this;
-      setTimeout(function(){
-        var cedula = payload.cedula;
-        var monto = payload.monto;
-        var ptsGanados = Math.round(monto); // 1 pt por cada $1
+  if (claveAcceso || !gScript) { mostrarApp(); } else { mostrarGate(); }
 
-        if (cedula === '99999999') {
-          if (!payload.telefono) {
-            self._ok && self._ok({ ok: false, requiereTelefono: true });
-            return;
-          }
-          // Registrar cliente nuevo
-          DEMO_DB.clientes[cedula] = {
-            cedula: cedula,
-            nombre: payload.nombre || 'Cliente Nuevo',
-            saldo: ptsGanados,
-            historico: ptsGanados,
-            nivel: 'Member',
-            nivelActual: 0,
-            bloqueadoPorVisita: false,
-            premios: [
-              { id:'cafe', nombre:'☕ Café gratis', puntos:200, alcanza:false, faltan:200-ptsGanados > 0 ? 200-ptsGanados : 0 },
-              { id:'desc10', nombre:'🏷️ Descuento 10%', puntos:500, alcanza:false, faltan:500-ptsGanados },
-              { id:'almuerzo', nombre:'🍽️ Almuerzo gratis', puntos:1000, alcanza:false, faltan:1000-ptsGanados },
-              { id:'giftcard', nombre:'🎁 Gift card $20', puntos:2000, alcanza:false, faltan:2000-ptsGanados },
-            ]
-          };
-          self._ok && self._ok({
-            ok: true, esNuevo: true,
-            nombre: payload.nombre || 'Cliente Nuevo',
-            puntosGanados: ptsGanados,
-            saldo: ptsGanados,
-            nivel: 'Member',
-            subioNivel: false,
-            whatsappEnviado: true,
-            mensaje: '¡Cliente registrado! Ganó ' + ptsGanados + ' pts.'
-          });
-          return;
+  function intentarEntrar(){
+    var valor = inClaveAcceso.value.trim();
+    if (!gScript){ mostrarApp(); return; }
+    setLoading(btnEntrarClave, true, 'Entrando...');
+    gateMsg.textContent = '';
+    gScript
+      .withSuccessHandler(function(res){
+        setLoading(btnEntrarClave, false, 'Entrar al panel');
+        if (res && res.ok){
+          claveAcceso = valor; nombreUsuario = res.nombre || '';
+          try { localStorage.setItem(CLAVE_KEY, valor); localStorage.setItem(NOMBRE_KEY, nombreUsuario); } catch(e) {}
+          mostrarApp();
+        } else {
+          gateMsg.textContent = 'Clave incorrecta. Intenta de nuevo.';
+          inClaveAcceso.value = ''; inClaveAcceso.focus();
         }
+      })
+      .withFailureHandler(function(){
+        setLoading(btnEntrarClave, false, 'Entrar al panel');
+        gateMsg.textContent = 'No se pudo conectar. Intenta de nuevo.';
+      })
+      .verificarClave(valor);
+  }
+  btnEntrarClave.addEventListener('click', intentarEntrar);
+  inClaveAcceso.addEventListener('keydown', function(e){ if (e.key === 'Enter') intentarEntrar(); });
+  var btnCerrarSesion = $('btnCerrarSesion');
+  if (btnCerrarSesion) btnCerrarSesion.addEventListener('click', cerrarSesionClave);
 
-        var cliente = DEMO_DB.clientes[cedula];
-        if (!cliente) {
-          self._ok && self._ok({ ok: false, requiereTelefono: true });
-          return;
-        }
-        var nivelAntes = cliente.nivelActual;
-        cliente.saldo += ptsGanados;
-        cliente.historico += ptsGanados;
-        var nivelDespues = calcularNivel(cliente.historico);
-        cliente.nivelActual = nivelDespues;
-        cliente.nivel = DEMO_DB.niveles[nivelDespues].nombre;
-        var subio = nivelDespues > nivelAntes;
-
-        // Actualizar alcanza en premios
-        cliente.premios.forEach(function(p){
-          p.alcanza = cliente.saldo >= p.puntos;
-          p.faltan = p.alcanza ? 0 : p.puntos - cliente.saldo;
-        });
-
-        self._ok && self._ok({
-          ok: true, esNuevo: false,
-          nombre: cliente.nombre,
-          puntosGanados: ptsGanados,
-          saldo: cliente.saldo,
-          nivel: cliente.nivel,
-          subioNivel: subio,
-          whatsappEnviado: true,
-          mensaje: '¡Compra registrada! ' + cliente.nombre + ' ganó ' + ptsGanados + ' pts.'
-        });
-      }, 900);
-    },
-    buscarCliente: function(cedula){
-      var self = this;
-      setTimeout(function(){
-        var cliente = DEMO_DB.clientes[cedula];
-        if (!cliente) {
-          self._ok && self._ok({ ok: false, mensaje: 'Cliente no encontrado. Si es nuevo, ve a "Registrar compra".' });
-          return;
-        }
-        self._ok && self._ok(Object.assign({ ok: true }, cliente));
-      }, 600);
-    },
-    canjearPremio: function(cedula, premioId){
-      var self = this;
-      setTimeout(function(){
-        var cliente = DEMO_DB.clientes[cedula];
-        if (!cliente) { self._ok && self._ok({ ok: false, mensaje: 'Cliente no encontrado.' }); return; }
-        var premio = cliente.premios.find(function(p){ return p.id === premioId; });
-        if (!premio || !premio.alcanza) { self._ok && self._ok({ ok: false, mensaje: 'No tiene suficientes puntos.' }); return; }
-        cliente.saldo -= premio.puntos;
-        cliente.bloqueadoPorVisita = true;
-        cliente.premios.forEach(function(p){
-          p.alcanza = cliente.saldo >= p.puntos;
-          p.faltan = p.alcanza ? 0 : p.puntos - cliente.saldo;
-        });
-        self._ok && self._ok({
-          ok: true,
-          mensaje: '¡Premio canjeado! ' + premio.nombre,
-          saldoRestante: cliente.saldo
-        });
-      }, 700);
-    }
-  };
-
-  /* ================================================================
-     HELPERS
-  ================================================================ */
+  /* ---- Helpers ---- */
   function $(id){ return document.getElementById(id); }
 
   var ICONS = {
@@ -850,29 +984,24 @@
     error:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
     warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
   };
-
   function showBanner(el, type, msg){
     el.className = 'banner show banner-' + type;
     el.innerHTML = '<div class="banner-icon">' + ICONS[type] + '</div><span>' + msg + '</span>';
   }
   function hideBanner(el){ el.className = 'banner'; el.innerHTML = ''; }
-
   function setLoading(btn, on, text){
     btn.classList.toggle('loading', on);
     btn.disabled = on;
     var lbl = btn.querySelector('.btn-label');
     var icon = btn.querySelector('.btn-icon');
-    if (lbl && text) lbl.textContent = on ? text : lbl.dataset.orig || lbl.textContent;
+    if (lbl && text) lbl.textContent = text;
     if (icon) icon.style.display = on ? 'none' : '';
   }
-
   function soloDigitos(str){ return (str || '').replace(/\D/g,''); }
 
-  /* ================================================================
-     TABS
-  ================================================================ */
-  var tabRegistrar = $('tabRegistrar');
-  var tabCanjear   = $('tabCanjear');
+  /* ---- Tabs ---- */
+  var tabRegistrar   = $('tabRegistrar');
+  var tabCanjear     = $('tabCanjear');
   var panelRegistrar = $('panelRegistrar');
   var panelCanjear   = $('panelCanjear');
   var bannerGlobal   = $('bannerGlobal');
@@ -894,128 +1023,91 @@
   tabRegistrar.addEventListener('click', function(){ activarTab('registrar'); });
   tabCanjear.addEventListener('click',   function(){ activarTab('canjear'); });
 
-  /* ================================================================
-     COMMERCE INFO
-  ================================================================ */
-  gScript.withSuccessHandler(function(info){
-    if (info && info.nombreComercio) $('nombreComercio').textContent = info.nombreComercio;
-  }).withFailureHandler(function(){}).obtenerInfoComercio();
+  /* ---- Info comercio ---- */
+  if (backendConectado()){
+    gScript.withSuccessHandler(function(info){
+      if (info && info.nombreComercio) $('nombreComercio').textContent = info.nombreComercio;
+    }).withFailureHandler(function(){}).obtenerInfoComercio();
+  }
 
-  /* ================================================================
-     PANEL 1 — REGISTRAR
-  ================================================================ */
-  var btnRegistrar  = $('btnRegistrar');
-  var btnSiguiente  = $('btnSiguiente');
-  var inCedula      = $('inCedula');
-  var inMonto       = $('inMonto');
-  var inTelefono    = $('inTelefono');
-  var inNombre      = $('inNombre');
-  var fieldTelefono = $('fieldTelefono');
-  var fieldNombre   = $('fieldNombre');
+  /* ---- Panel 1 — Registrar ---- */
+  var btnRegistrar    = $('btnRegistrar');
+  var btnSiguiente    = $('btnSiguiente');
+  var inCedula        = $('inCedula');
+  var inMonto         = $('inMonto');
+  var inFactura       = $('inFactura');
+  var inFecha         = $('inFecha');
+  var inTelefono      = $('inTelefono');
+  var inNombre        = $('inNombre');
+  var fieldTelefono   = $('fieldTelefono');
+  var fieldNombre     = $('fieldNombre');
   var resultRegistrar = $('resultRegistrar');
-  var wrapCedula    = $('wrapCedula');
-  var wrapMonto     = $('wrapMonto');
-  var confirmHint   = $('confirmHint');
+  var wrapCedula      = $('wrapCedula');
+  var wrapMonto       = $('wrapMonto');
+  var wrapFactura     = $('wrapFactura');
+  var confirmOverlay  = $('confirmOverlay');
+  var btnCancelarConfirm   = $('btnCancelarConfirm');
+  var btnConfirmarRegistro = $('btnConfirmarRegistro');
 
-  // Input micro-feedback
-  inCedula.addEventListener('input', function(){
-    var v = soloDigitos(inCedula.value);
-    wrapCedula.classList.toggle('valid', v.length >= 6);
-    // Show hint when fields have values
-    updateConfirmHint();
+  (function initFecha(){
+    var hoy = new Date();
+    inFecha.value = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
+  })();
+
+  inCedula.addEventListener('input',  function(){ wrapCedula.classList.toggle('valid', soloDigitos(inCedula.value).length >= 6); });
+  inMonto.addEventListener('input',   function(){ var v = parseFloat(inMonto.value); wrapMonto.classList.toggle('valid', v > 0 && !isNaN(v)); });
+  inFactura.addEventListener('input', function(){ wrapFactura.classList.toggle('valid', inFactura.value.trim().length > 0); });
+
+  function abrirConfirmacion(cedula, monto, factura){
+    $('confirmCedula').textContent = 'V-' + cedula;
+    $('confirmMonto').textContent  = '$' + monto.toFixed(2);
+    $('confirmFactura').textContent = '#' + factura;
+    confirmOverlay.classList.add('show');
+  }
+  function cerrarConfirmacion(){ confirmOverlay.classList.remove('show'); }
+
+  btnRegistrar.addEventListener('click', function(){
+    hideBanner(bannerGlobal);
+    var cedula  = soloDigitos(inCedula.value);
+    var monto   = parseFloat(inMonto.value);
+    var factura = inFactura.value.trim();
+    if (!cedula || cedula.length < 6){ showBanner(bannerGlobal,'error','Escribe una cédula válida (mínimo 6 dígitos).'); inCedula.focus(); return; }
+    if (!monto || monto <= 0)         { showBanner(bannerGlobal,'error','Escribe el monto de la compra.'); inMonto.focus(); return; }
+    if (!factura)                      { showBanner(bannerGlobal,'error','Escribe el número de factura.'); inFactura.focus(); return; }
+    abrirConfirmacion(cedula, monto, factura);
   });
-  inMonto.addEventListener('input', function(){
-    var v = parseFloat(inMonto.value);
-    wrapMonto.classList.toggle('valid', v > 0 && !isNaN(v));
-    updateConfirmHint();
-  });
-
-  function updateConfirmHint(){
-    var cedOk = soloDigitos(inCedula.value).length >= 6;
-    var montoOk = parseFloat(inMonto.value) > 0;
-    confirmHint.style.display = (cedOk && montoOk) ? 'block' : 'none';
-  }
-
-  // Hold-to-confirm logic
-  var holdTimer = null;
-  var holdStartTime = null;
-  var HOLD_MS = 1800;
-
-  function startHold(){
-    var cedula = soloDigitos(inCedula.value);
-    var monto  = parseFloat(inMonto.value);
-    if (!cedula || cedula.length < 6){
-      showBanner(bannerGlobal, 'error', 'Escribe una cédula válida (mínimo 6 dígitos).');
-      inCedula.focus(); return;
-    }
-    if (!monto || monto <= 0){
-      showBanner(bannerGlobal, 'error', 'Escribe el monto de la compra.');
-      inMonto.focus(); return;
-    }
-    holdStartTime = Date.now();
-    $('holdBar').style.transition = 'none';
-    $('holdBar').style.width = '0%';
-    btnRegistrar.classList.add('holding');
-    // Force reflow
-    void $('holdBar').offsetWidth;
-    $('holdBar').style.transition = 'width ' + HOLD_MS + 'ms linear';
-    $('holdBar').style.width = '100%';
-
-    holdTimer = setTimeout(function(){ ejecutarRegistro(); }, HOLD_MS);
-  }
-  function cancelHold(){
-    if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
-    btnRegistrar.classList.remove('holding');
-    $('holdBar').style.transition = 'none';
-    $('holdBar').style.width = '0%';
-  }
-
-  btnRegistrar.addEventListener('mousedown', startHold);
-  btnRegistrar.addEventListener('touchstart', function(e){ e.preventDefault(); startHold(); });
-  btnRegistrar.addEventListener('mouseup',   cancelHold);
-  btnRegistrar.addEventListener('mouseleave',cancelHold);
-  btnRegistrar.addEventListener('touchend',  cancelHold);
-  btnRegistrar.addEventListener('touchcancel',cancelHold);
+  btnCancelarConfirm.addEventListener('click', cerrarConfirmacion);
+  confirmOverlay.addEventListener('click', function(e){ if (e.target === confirmOverlay) cerrarConfirmacion(); });
+  btnConfirmarRegistro.addEventListener('click', function(){ cerrarConfirmacion(); ejecutarRegistro(); });
 
   function ejecutarRegistro(){
-    btnRegistrar.classList.remove('holding');
-    $('holdBar').style.width = '0%';
     hideBanner(bannerGlobal);
-
-    var cedula = soloDigitos(inCedula.value);
-    var monto  = parseFloat(inMonto.value);
-    var payload = { cedula: cedula, monto: monto };
+    if (!backendConectado()) return;
+    var cedula  = soloDigitos(inCedula.value);
+    var monto   = parseFloat(inMonto.value);
+    var payload = { cedula:cedula, monto:monto, factura:inFactura.value.trim(), fecha:inFecha.value, clave:claveAcceso };
     if (fieldTelefono.style.display !== 'none'){
       payload.telefono = soloDigitos(inTelefono.value);
       payload.nombre   = inNombre.value;
     }
     setLoading(btnRegistrar, true, 'Registrando...');
-
     gScript
-      .withSuccessHandler(function(res){
-        setLoading(btnRegistrar, false);
-        manejarRespuestaRegistro(res, payload);
-      })
-      .withFailureHandler(function(){
-        setLoading(btnRegistrar, false);
-        showBanner(bannerGlobal, 'error', 'No se pudo conectar. Intenta de nuevo.');
-      })
+      .withSuccessHandler(function(res){ setLoading(btnRegistrar, false, 'Registrar compra'); manejarRespuestaRegistro(res, payload); })
+      .withFailureHandler(function(){   setLoading(btnRegistrar, false, 'Registrar compra'); showBanner(bannerGlobal,'error','No se pudo conectar. Intenta de nuevo.'); })
       .registrarCompra(payload);
   }
 
   function manejarRespuestaRegistro(res, payload){
     if (!res || !res.ok){
+      if (res && res.claveInvalida){ showBanner(bannerGlobal,'error','Clave de acceso incorrecta.'); cerrarSesionClave(); return; }
       if (res && res.requiereTelefono){
-        fieldTelefono.style.display = 'flex';
-        fieldNombre.style.display   = 'flex';
-        showBanner(bannerGlobal, 'warn', 'Cliente nuevo — pide su WhatsApp para activar la cuenta.');
-        inTelefono.focus();
-        return;
+        fieldTelefono.style.display = 'flex'; fieldNombre.style.display = 'flex';
+        showBanner(bannerGlobal,'warn','Cliente nuevo — pide su WhatsApp para activar la cuenta.');
+        inTelefono.focus(); return;
       }
-      showBanner(bannerGlobal, 'error', (res && res.mensaje) || 'No se pudo registrar la compra.');
+      showBanner(bannerGlobal,'error',(res && res.mensaje) || 'No se pudo registrar la compra.');
       return;
     }
-    // Populate result card
     $('resTitle').textContent = res.esNuevo ? '¡Cliente registrado!' : '¡Compra registrada!';
     var chip = $('resChip');
     if (res.whatsappEnviado){ chip.textContent = '✓ WhatsApp enviado'; chip.className = 'r-chip'; }
@@ -1025,40 +1117,27 @@
     var nota = res.nombre + ' · Nivel ' + res.nivel;
     if (res.subioNivel) nota = '🎉 ¡Subió de nivel! ' + nota;
     $('resNota').textContent = nota;
-
     resultRegistrar.classList.add('show');
     btnSiguiente.style.display = '';
-    showBanner(bannerGlobal, 'ok', res.mensaje);
-
-    // Reset inputs but keep result visible
-    inCedula.value = ''; inMonto.value = '';
+    showBanner(bannerGlobal,'ok', res.mensaje);
+    inCedula.value = ''; inMonto.value = ''; inFactura.value = '';
     inTelefono.value = ''; inNombre.value = '';
-    fieldTelefono.style.display = 'none';
-    fieldNombre.style.display   = 'none';
-    wrapCedula.classList.remove('valid');
-    wrapMonto.classList.remove('valid');
-    confirmHint.style.display = 'none';
+    fieldTelefono.style.display = 'none'; fieldNombre.style.display = 'none';
+    wrapCedula.classList.remove('valid'); wrapMonto.classList.remove('valid'); wrapFactura.classList.remove('valid');
+    (function resetF(){ var hoy = new Date(); inFecha.value = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0'); })();
     inCedula.focus();
   }
 
-  // "Siguiente cliente" button
   btnSiguiente.addEventListener('click', function(){
-    resultRegistrar.classList.remove('show');
-    btnSiguiente.style.display = 'none';
-    hideBanner(bannerGlobal);
-    inCedula.focus();
+    resultRegistrar.classList.remove('show'); btnSiguiente.style.display = 'none';
+    hideBanner(bannerGlobal); inCedula.focus();
   });
 
-  // Enter para Registrar
   [inCedula, inMonto, inTelefono].forEach(function(el){
-    el.addEventListener('keydown', function(e){
-      if (e.key === 'Enter') ejecutarRegistro();
-    });
+    el.addEventListener('keydown', function(e){ if (e.key === 'Enter') btnRegistrar.click(); });
   });
 
-  /* ================================================================
-     PANEL 2 — CONSULTAR / CANJEAR
-  ================================================================ */
+  /* ---- Panel 2 — Consultar / Canjear ---- */
   var btnBuscar      = $('btnBuscar');
   var inCedulaBuscar = $('inCedulaBuscar');
   var emptyState     = $('emptyState');
@@ -1070,72 +1149,44 @@
   var premioSel      = null;
 
   function doBuscar(cedula){
+    if (!backendConectado()){ emptyState.style.display = 'block'; return; }
     setLoading(btnBuscar, true, 'Buscando...');
-    premioSel = null;
-    cardWrap.classList.remove('show');
-    emptyState.style.display = 'none';
-    hideBanner(bannerGlobal);
-
+    premioSel = null; cardWrap.classList.remove('show');
+    emptyState.style.display = 'none'; hideBanner(bannerGlobal);
     gScript
-      .withSuccessHandler(function(res){
-        setLoading(btnBuscar, false, 'Buscar cliente');
-        manejarBusqueda(res);
-      })
-      .withFailureHandler(function(){
-        setLoading(btnBuscar, false, 'Buscar cliente');
-        showBanner(bannerGlobal, 'error', 'No se pudo conectar. Intenta de nuevo.');
-        emptyState.style.display = 'block';
-      })
+      .withSuccessHandler(function(res){ setLoading(btnBuscar, false, 'Buscar cliente'); manejarBusqueda(res); })
+      .withFailureHandler(function(){    setLoading(btnBuscar, false, 'Buscar cliente'); showBanner(bannerGlobal,'error','No se pudo conectar. Intenta de nuevo.'); emptyState.style.display = 'block'; })
       .buscarCliente(cedula);
   }
 
   btnBuscar.addEventListener('click', function(){
     var cedula = soloDigitos(inCedulaBuscar.value);
-    if (!cedula || cedula.length < 6){
-      showBanner(bannerGlobal, 'error', 'Escribe una cédula válida.');
-      inCedulaBuscar.focus(); return;
-    }
+    if (!cedula || cedula.length < 6){ showBanner(bannerGlobal,'error','Escribe una cédula válida.'); inCedulaBuscar.focus(); return; }
     doBuscar(cedula);
   });
-
-  inCedulaBuscar.addEventListener('keydown', function(e){
-    if (e.key === 'Enter') btnBuscar.click();
-  });
+  inCedulaBuscar.addEventListener('keydown', function(e){ if (e.key === 'Enter') btnBuscar.click(); });
 
   function manejarBusqueda(res){
-    if (!res || !res.ok){
-      emptyState.style.display = 'block';
-      showBanner(bannerGlobal, 'error', (res && res.mensaje) || 'Cliente no encontrado.');
-      return;
-    }
+    if (!res || !res.ok){ emptyState.style.display = 'block'; showBanner(bannerGlobal,'error',(res && res.mensaje) || 'Cliente no encontrado.'); return; }
     estadoActual = res;
-    emptyState.style.display = 'none';
-    cardWrap.classList.add('show');
-
-    // Nivel e info
+    emptyState.style.display = 'none'; cardWrap.classList.add('show');
     $('mTier').textContent  = (res.nivel || 'MEMBER').toUpperCase();
     $('mName').textContent  = res.nombre;
     $('mId').textContent    = 'CI ' + res.cedula;
     $('mSaldo').textContent = res.saldo + ' pts';
     $('mHist').textContent  = res.historico + ' pts históricos';
-
-    // Progress bar
-    var nivelIdx = typeof res.nivelActual === 'number' ? res.nivelActual : calcularNivel(res.historico || 0);
-    var prog = calcularProgreso(res.historico || 0, nivelIdx);
+    var prog = res.progreso;
     $('mProgressFill').style.width  = prog.pct + '%';
     $('mProgressPct').textContent   = prog.pct + '%';
     $('mProgressLabel').textContent = prog.label;
-
     limitBanner.classList.toggle('show', !!res.bloqueadoPorVisita);
     renderPremios(res);
   }
 
   function renderPremios(res){
-    rewardsList.innerHTML = '';
-    premioSel = null;
-    actualizarBotonCanje();
+    rewardsList.innerHTML = ''; premioSel = null; actualizarBotonCanje();
     if (!res.premios || !res.premios.length){
-      rewardsList.innerHTML = '<p style="color:var(--color-neutral-600);font-size:14px;text-align:center;padding:20px 0;">No hay premios configurados.</p>';
+      rewardsList.innerHTML = '<p style="color:var(--text-3);font-size:13.5px;text-align:center;padding:20px 0;">No hay premios configurados.</p>';
       return;
     }
     res.premios.forEach(function(p){
@@ -1152,9 +1203,7 @@
       if (available){
         row.addEventListener('click', function(){
           document.querySelectorAll('.reward').forEach(function(r){ r.classList.remove('selected'); });
-          row.classList.add('selected');
-          premioSel = p.id;
-          actualizarBotonCanje();
+          row.classList.add('selected'); premioSel = p.id; actualizarBotonCanje();
         });
       }
       rewardsList.appendChild(row);
@@ -1169,46 +1218,21 @@
 
   btnCanjear.addEventListener('click', function(){
     if (!premioSel || !estadoActual) return;
-    hideBanner(bannerGlobal);
-    setLoading(btnCanjear, true, 'Canjeando...');
-
+    hideBanner(bannerGlobal); setLoading(btnCanjear, true, 'Canjeando...');
     gScript
       .withSuccessHandler(function(res){
-        setLoading(btnCanjear, false);
+        setLoading(btnCanjear, false, 'Canjear premio seleccionado');
         if (!res || !res.ok){
-          showBanner(bannerGlobal, 'error', (res && res.mensaje) || 'No se pudo procesar el canje.');
-          return;
+          if (res && res.claveInvalida){ showBanner(bannerGlobal,'error','Clave de acceso incorrecta.'); cerrarSesionClave(); return; }
+          showBanner(bannerGlobal,'error',(res && res.mensaje) || 'No se pudo procesar el canje.'); return;
         }
-        showBanner(bannerGlobal, 'ok', res.mensaje + ' Quedan ' + res.saldoRestante + ' pts.');
-        // Refresh card
+        showBanner(bannerGlobal,'ok', res.mensaje + ' Quedan ' + res.saldoRestante + ' pts.');
         gScript.withSuccessHandler(manejarBusqueda).buscarCliente(estadoActual.cedula);
       })
-      .withFailureHandler(function(){
-        setLoading(btnCanjear, false);
-        showBanner(bannerGlobal, 'error', 'No se pudo conectar. Intenta de nuevo.');
-      })
-      .canjearPremio(estadoActual.cedula, premioSel);
+      .withFailureHandler(function(){ setLoading(btnCanjear, false, 'Canjear premio seleccionado'); showBanner(bannerGlobal,'error','No se pudo conectar. Intenta de nuevo.'); })
+      .canjearPremio(estadoActual.cedula, premioSel, claveAcceso);
   });
 
-  /* ================================================================
-     HELPERS GLOBALES PARA BOTONES DEMO
-  ================================================================ */
-  window.cargarDemoRegistrar = function(cedula){
-    inCedula.value = cedula;
-    wrapCedula.classList.toggle('valid', cedula.length >= 6);
-    inMonto.value = '50.00';
-    wrapMonto.classList.add('valid');
-    confirmHint.style.display = 'block';
-    inCedula.focus();
-    showBanner(bannerGlobal, 'ok', 'Datos cargados. Mantén presionado el botón para registrar.');
-  };
-  window.cargarDemoBuscar = function(cedula){
-    inCedulaBuscar.value = cedula;
-    activarTab('canjear');
-    setTimeout(function(){ doBuscar(cedula); }, 100);
-  };
-
-  /* Iniciar */
   inCedula.focus();
 })();
 </script>
